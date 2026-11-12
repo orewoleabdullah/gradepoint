@@ -3,9 +3,12 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#d71920">
+    <meta name="theme-color" content="#0f1736">
     <meta name="description" content="Calculate your GPA and track your academic performance with GradePoint.">
     <title>GradePoint — GPA &amp; CGPA Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <script src="js/grading.js" defer></script>
     <script src="js/calculator.js" defer></script>
@@ -14,13 +17,33 @@
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href="#" aria-label="GradePoint home">Grade<span>Point</span></a>
-      <div class="hero">
-        <p class="eyebrow">Your academics, made clear</p>
-        <h1>GPA &amp; CGPA Calculator</h1>
-        <p>Calculate your GPA and track your academic performance with ease.</p>
+      <div class="topbar">
+        <a class="brand" href="#" aria-label="GradePoint home">Grade<span>Point</span></a>
+        <nav class="primary-nav" aria-label="Main navigation">
+          <div class="tabs" role="tablist" aria-label="Calculator type">
+            <button class="tab is-active" id="gpa-tab" type="button" role="tab" aria-selected="true" aria-controls="gpa-panel">GPA Calculator</button>
+            <button class="tab" id="cgpa-tab" type="button" role="tab" aria-selected="false" aria-controls="cgpa-panel">CGPA Calculator</button>
+          </div>
+          <button class="nav-action" id="toggle-grading-settings" type="button" aria-expanded="false" aria-controls="grading-settings">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="8" cy="6" r="2"/><circle cx="16" cy="12" r="2"/><circle cx="10" cy="18" r="2"/></svg>
+            <span>Grading system</span>
+          </button>
+          <button class="theme-toggle" id="toggle-theme" type="button" aria-label="Switch to dark theme" title="Switch to dark theme">
+            <svg class="icon-sun" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
+            <svg class="icon-moon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20.2 15.1A8.5 8.5 0 0 1 8.9 3.8 8.6 8.6 0 1 0 20.2 15.1Z"/></svg>
+          </button>
+        </nav>
       </div>
     </header>
+
+    <div class="hero-banner">
+      <div class="header-inner">
+        <div class="hero">
+          <h1>Your academic journey,<br class="desktop-break"> calculated.</h1>
+          <p>Calculate your GPA, track your CGPA and stay informed about your academic progress.</p>
+        </div>
+      </div>
+    </div>
 
     <main class="page-content">
       <section class="calculator-card" aria-label="GradePoint calculator">
@@ -31,7 +54,6 @@
             <option value="4">4.0 scale</option>
             <option value="custom">Custom scale</option>
           </select>
-          <button class="text-button" id="toggle-grading-settings" type="button" aria-expanded="false" aria-controls="grading-settings">Configure grades</button>
         </div>
 
         <section class="grading-settings" id="grading-settings" hidden aria-labelledby="grading-title">
@@ -55,14 +77,10 @@
           <p class="inline-message" id="grading-message" role="status"></p>
         </section>
 
-        <div class="tabs" role="tablist" aria-label="Calculator type">
-          <button class="tab is-active" id="gpa-tab" type="button" role="tab" aria-selected="true" aria-controls="gpa-panel">GPA Calculator</button>
-          <button class="tab" id="cgpa-tab" type="button" role="tab" aria-selected="false" aria-controls="cgpa-panel">CGPA Calculator</button>
-        </div>
-
         <section class="tab-panel" id="gpa-panel" role="tabpanel" aria-labelledby="gpa-tab">
           <div class="section-heading">
             <div>
+              <span class="section-kicker">Semester breakdown</span>
               <h2>Course details</h2>
               <p>Enter your courses, credit units and grades for this semester.</p>
             </div>
@@ -85,6 +103,7 @@
         <section class="tab-panel" id="cgpa-panel" role="tabpanel" aria-labelledby="cgpa-tab" hidden>
           <div class="section-heading">
             <div>
+              <span class="section-kicker">Your academic record</span>
               <h2>Semester records</h2>
               <p>Your CGPA is weighted by credit units, not an average of semester GPAs.</p>
             </div>

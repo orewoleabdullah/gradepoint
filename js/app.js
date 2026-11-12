@@ -3,6 +3,7 @@
 
   const $ = (selector) => document.querySelector(selector);
   const state = window.GradePointStorage.load();
+  state.theme = state.theme === "dark" ? "dark" : "light";
   let semesterDraft = null;
   let customDraft = { maximum: state.custom.maximum, grades: state.custom.grades.map((grade) => ({ ...grade })) };
   const scaleSelect = $("#grading-scale");
@@ -32,6 +33,16 @@
     target.textContent = message;
     window.clearTimeout(showAppMessage.timer);
     showAppMessage.timer = window.setTimeout(() => { target.textContent = ""; }, 3500);
+  }
+
+  function applyTheme(theme) {
+    state.theme = theme;
+    document.documentElement.dataset.theme = theme;
+    const button = $("#toggle-theme");
+    const label = theme === "dark" ? "Switch to light theme" : "Switch to dark theme";
+    button.setAttribute("aria-label", label);
+    button.title = label;
+    document.querySelector('meta[name="theme-color"]').content = theme === "dark" ? "#070b1c" : "#0f1736";
   }
 
   function format(value) {
@@ -77,12 +88,13 @@
     if (!selected) select.value = "";
   }
 
-  function renderCourses() {
+  function renderCourses(animateLast = false) {
     const container = $("#course-rows");
     container.replaceChildren();
     state.courses.forEach((course, index) => {
       const row = document.createElement("div");
       row.className = "course-grid course-row";
+      if (animateLast && index === state.courses.length - 1) row.classList.add("is-entering");
       row.dataset.index = String(index);
 
       const code = document.createElement("input");
@@ -128,10 +140,14 @@
       remove.textContent = "×";
       remove.setAttribute("aria-label", `Remove course ${index + 1}`);
       remove.addEventListener("click", () => {
-        state.courses.splice(index, 1);
-        persist();
-        renderCourses();
-        clearResult("gpa");
+        remove.disabled = true;
+        row.classList.add("is-removing");
+        row.addEventListener("animationend", () => {
+          state.courses.splice(index, 1);
+          persist();
+          renderCourses();
+          clearResult("gpa");
+        }, { once: true });
       });
 
       code.addEventListener("input", () => { course.code = code.value; persist(); clearResult("gpa"); });
@@ -231,10 +247,13 @@
     const value = document.createElement("strong");
     value.className = "result-value";
     value.textContent = format(result.value);
+    const maximum = document.createElement("span");
+    maximum.className = "result-out-of";
+    maximum.textContent = `/ ${format(scale.maximum)}`;
     const classification = document.createElement("span");
     classification.className = "classification";
     classification.textContent = window.GradePointCalculator.classify(result.value, scale.maximum);
-    left.append(label, value, classification);
+    left.append(label, value, maximum, classification);
 
     const stats = document.createElement("div");
     stats.className = "result-stats";
@@ -318,9 +337,8 @@
       nameLabel.className = "field-label";
       nameLabel.textContent = "Semester";
       const nameValue = document.createElement("strong");
+      nameValue.className = "semester-entry-value";
       nameValue.textContent = semester.name;
-      nameValue.style.display = "block";
-      nameValue.style.paddingTop = "9px";
       name.append(nameLabel, nameValue);
 
       const gpa = document.createElement("div");
@@ -328,9 +346,8 @@
       gpaLabel.className = "field-label";
       gpaLabel.textContent = "Semester GPA";
       const gpaValue = document.createElement("span");
+      gpaValue.className = "semester-entry-value";
       gpaValue.textContent = format(Number(semester.gpa));
-      gpaValue.style.display = "block";
-      gpaValue.style.paddingTop = "10px";
       gpa.append(gpaLabel, gpaValue);
 
       const units = document.createElement("div");
@@ -338,9 +355,8 @@
       unitsLabel.className = "field-label";
       unitsLabel.textContent = "Credit units";
       const unitsValue = document.createElement("span");
+      unitsValue.className = "semester-entry-value";
       unitsValue.textContent = format(Number(semester.units));
-      unitsValue.style.display = "block";
-      unitsValue.style.paddingTop = "10px";
       units.append(unitsLabel, unitsValue);
 
       const buttons = document.createElement("div");
@@ -454,18 +470,31 @@
   }
 
   scaleSelect.value = state.scale;
+  applyTheme(state.theme);
   renderCustomScale();
   renderCourses();
   renderPrevious();
   renderSemesters();
   renderHistory();
 
+  window.addEventListener("scroll", () => {
+    const header = $(".site-header");
+    if (header) {
+      header.classList.toggle("is-scrolled", window.scrollY > 15);
+    }
+  }, { passive: true });
+
   $("#add-course").addEventListener("click", () => {
     state.courses.push({ code: "", units: "", grade: "" });
     persist();
-    renderCourses();
+    renderCourses(true);
     const rows = $("#course-rows").querySelectorAll("input[type=text]");
     rows[rows.length - 1].focus();
+  });
+  $("#toggle-theme").addEventListener("click", () => {
+    const theme = state.theme === "dark" ? "light" : "dark";
+    applyTheme(theme);
+    persist(`${theme === "dark" ? "Dark" : "Light"} theme enabled.`);
   });
   $("#calculate-gpa").addEventListener("click", () => {
     clearResult("gpa");

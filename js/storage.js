@@ -4,6 +4,7 @@
   const KEY = "gradepoint-data-v1";
   const defaults = {
     scale: "5",
+    theme: "light",
     custom: { maximum: 5, grades: [{ letter: "A", point: 5 }, { letter: "B", point: 4 }, { letter: "C", point: 3 }, { letter: "D", point: 2 }, { letter: "F", point: 0 }] },
     courses: Array.from({ length: 4 }, () => ({ code: "", units: "", grade: "" })),
     semesters: [],

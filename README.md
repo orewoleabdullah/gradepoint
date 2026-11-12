@@ -11,6 +11,8 @@ GradePoint is a lightweight, responsive GPA and CGPA calculator for university s
 - Include earlier weighted grade points and credit units in a CGPA calculation.
 - Save course entries, scale settings, semester records, previous records, and recent calculation history on the device.
 - Reset academic records or clear calculation history with confirmation.
+- Switch between polished light and dark themes; your theme preference is saved on the device.
+- Subtle motion and responsive controls, with reduced-motion accessibility support.
 - Responsive layout and accessible, keyboard-operable controls.
 
 ## Run
