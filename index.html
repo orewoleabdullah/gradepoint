@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#d71920">
+    <meta name="description" content="Calculate your GPA and track your academic performance with GradePoint.">
+    <title>GradePoint — GPA &amp; CGPA Calculator</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/grading.js" defer></script>
+    <script src="js/calculator.js" defer></script>
+    <script src="js/storage.js" defer></script>
+    <script src="js/app.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#" aria-label="GradePoint home">Grade<span>Point</span></a>
+      <div class="hero">
+        <p class="eyebrow">Your academics, made clear</p>
+        <h1>GPA &amp; CGPA Calculator</h1>
+        <p>Calculate your GPA and track your academic performance with ease.</p>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <section class="calculator-card" aria-label="GradePoint calculator">
+        <div class="settings-bar">
+          <label for="grading-scale">Grading system</label>
+          <select id="grading-scale">
+            <option value="5">5.0 scale</option>
+            <option value="4">4.0 scale</option>
+            <option value="custom">Custom scale</option>
+          </select>
+          <button class="text-button" id="toggle-grading-settings" type="button" aria-expanded="false" aria-controls="grading-settings">Configure grades</button>
+        </div>
+
+        <section class="grading-settings" id="grading-settings" hidden aria-labelledby="grading-title">
+          <div class="section-heading">
+            <div>
+              <h2 id="grading-title">Custom grading scale</h2>
+              <p>Set the maximum point and the grade letters used by your university.</p>
+            </div>
+          </div>
+          <div class="custom-scale-controls">
+            <label class="field-label" for="custom-maximum">Maximum grade point
+              <input id="custom-maximum" type="number" min="0.1" max="10" step="0.1" value="5">
+            </label>
+            <div class="custom-grades-wrap">
+              <div class="custom-grade-header"><span>Grade</span><span>Grade point</span><span></span></div>
+              <div id="custom-grades"></div>
+              <button class="button button-outline button-small" id="add-custom-grade" type="button">Add grade</button>
+            </div>
+          </div>
+          <button class="button button-primary button-small" id="save-custom-scale" type="button">Save custom scale</button>
+          <p class="inline-message" id="grading-message" role="status"></p>
+        </section>
+
+        <div class="tabs" role="tablist" aria-label="Calculator type">
+          <button class="tab is-active" id="gpa-tab" type="button" role="tab" aria-selected="true" aria-controls="gpa-panel">GPA Calculator</button>
+          <button class="tab" id="cgpa-tab" type="button" role="tab" aria-selected="false" aria-controls="cgpa-panel">CGPA Calculator</button>
+        </div>
+
+        <section class="tab-panel" id="gpa-panel" role="tabpanel" aria-labelledby="gpa-tab">
+          <div class="section-heading">
+            <div>
+              <h2>Course details</h2>
+              <p>Enter your courses, credit units and grades for this semester.</p>
+            </div>
+            <span class="scale-note" id="scale-note">Grades on a 5.0 scale</span>
+          </div>
+          <div class="course-table">
+            <div class="course-grid course-header" aria-hidden="true">
+              <span>Course code</span><span>Course unit</span><span>Grade</span><span></span>
+            </div>
+            <div id="course-rows"></div>
+          </div>
+          <div class="form-actions">
+            <button class="button button-outline" id="add-course" type="button"><span aria-hidden="true">+</span> Add course</button>
+            <button class="button button-primary" id="calculate-gpa" type="button">Calculate GPA</button>
+          </div>
+          <p class="form-message" id="gpa-message" role="alert"></p>
+          <div class="result-panel" id="gpa-result" aria-live="polite" hidden></div>
+        </section>
+
+        <section class="tab-panel" id="cgpa-panel" role="tabpanel" aria-labelledby="cgpa-tab" hidden>
+          <div class="section-heading">
+            <div>
+              <h2>Semester records</h2>
+              <p>Your CGPA is weighted by credit units, not an average of semester GPAs.</p>
+            </div>
+          </div>
+          <form class="previous-record" id="previous-record" novalidate>
+            <div class="subsection-title">
+              <div>
+                <h3>Previous cumulative record</h3>
+                <p>Optional — include results earned before using GradePoint.</p>
+              </div>
+            </div>
+            <div class="previous-fields">
+              <label class="field-label" for="previous-points">Previous weighted grade points
+                <input id="previous-points" type="number" min="0" step="0.01" inputmode="decimal" placeholder="e.g. 42">
+              </label>
+              <label class="field-label" for="previous-units">Previous total credit units
+                <input id="previous-units" type="number" min="0" step="0.5" inputmode="decimal" placeholder="e.g. 10">
+              </label>
+              <button class="button button-outline button-small" id="save-previous" type="submit">Save record</button>
+            </div>
+            <p class="inline-message" id="previous-message" role="status"></p>
+          </form>
+
+          <div class="subsection-title semester-title">
+            <div><h3>Semesters</h3><p>Add or update your semester results.</p></div>
+            <button class="button button-outline button-small" id="add-semester" type="button">+ Add semester</button>
+          </div>
+          <div class="semester-list" id="semester-list"></div>
+          <p class="form-message" id="cgpa-message" role="alert"></p>
+          <button class="button button-primary" id="calculate-cgpa" type="button">Calculate CGPA</button>
+          <div class="result-panel" id="cgpa-result" aria-live="polite" hidden></div>
+        </section>
+
+        <section class="history-section" aria-labelledby="history-title">
+          <div class="section-heading history-heading">
+            <div><h2 id="history-title">Calculation history</h2><p>Your recent GPA and CGPA calculations on this device.</p></div>
+            <button class="text-button" id="clear-history" type="button">Clear history</button>
+          </div>
+          <ul class="history-list" id="history-list"></ul>
+          <p class="empty-history" id="empty-history">Your completed calculations will appear here.</p>
+        </section>
+
+        <footer class="card-footer">
+          <p>Your records stay on this device. No account needed.</p>
+          <button class="text-button danger-text" id="reset-records" type="button">Reset academic records</button>
+        </footer>
+        <p class="app-message" id="app-message" role="status" aria-live="polite"></p>
+      </section>
+    </main>
+    <script>
+      document.documentElement.classList.add("js-ready");
+    </script>
+  </body>
+</html>
