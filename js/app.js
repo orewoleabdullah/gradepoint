@@ -59,7 +59,7 @@
     select.replaceChildren();
     const placeholder = document.createElement("option");
     placeholder.value = "";
-    placeholder.textContent = "Select grade";
+    placeholder.textContent = "Grade";
     select.append(placeholder);
 
     const scale = currentScale();
@@ -100,7 +100,7 @@
       const code = document.createElement("input");
       code.type = "text";
       code.maxLength = 24;
-      code.placeholder = "e.g. CSC 201";
+      code.placeholder = "Course code";
       code.value = course.code;
       code.setAttribute("aria-label", `Course ${index + 1} code`);
       code.autocomplete = "off";
@@ -110,7 +110,7 @@
       units.min = "0.01";
       units.step = "0.5";
       units.inputMode = "decimal";
-      units.placeholder = "e.g. 3";
+      units.placeholder = "Course unit";
       units.value = course.units;
       units.setAttribute("aria-label", `Course ${index + 1} units`);
 
