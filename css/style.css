@@ -1128,13 +1128,12 @@ select {
 
   .course-header { display: none; }
   .course-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 7px;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.8fr) minmax(0, 0.9fr) 28px;
+    gap: 6px;
   }
   .course-row {
-    position: relative;
     margin-bottom: 10px;
-    padding: 34px 10px 10px;
+    padding: 10px 8px;
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     background: var(--surface-soft);
@@ -1147,13 +1146,10 @@ select {
     padding: 8px 7px;
     font-size: 11px;
   }
-  .course-row select { padding-right: 17px; }
+  .course-row select { padding-right: 16px; }
   .remove-course {
-    position: absolute;
-    top: 4px;
-    right: 7px;
     min-width: 28px;
-    min-height: 26px;
+    min-height: 36px;
     font-size: 18px;
   }
 

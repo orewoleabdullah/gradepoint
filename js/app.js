@@ -81,7 +81,7 @@
     for (const grade of scale.grades) {
       const option = document.createElement("option");
       option.value = grade.letter;
-      option.textContent = `${grade.letter} (${grade.point})`;
+      option.textContent = grade.letter;
       option.selected = !stale && grade.letter === selected;
       select.append(option);
     }
@@ -100,7 +100,7 @@
       const code = document.createElement("input");
       code.type = "text";
       code.maxLength = 24;
-      code.placeholder = "Course code";
+      code.placeholder = "Code";
       code.value = course.code;
       code.setAttribute("aria-label", `Course ${index + 1} code`);
       code.autocomplete = "off";
@@ -110,7 +110,7 @@
       units.min = "0.01";
       units.step = "0.5";
       units.inputMode = "decimal";
-      units.placeholder = "Course unit";
+      units.placeholder = "Units";
       units.value = course.units;
       units.setAttribute("aria-label", `Course ${index + 1} units`);
 
@@ -494,7 +494,7 @@
   $("#toggle-theme").addEventListener("click", () => {
     const theme = state.theme === "dark" ? "light" : "dark";
     applyTheme(theme);
-    persist(`${theme === "dark" ? "Dark" : "Light"} theme enabled.`);
+    persist();
   });
   $("#calculate-gpa").addEventListener("click", () => {
     clearResult("gpa");
